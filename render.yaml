@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: airoki-bot
+    env: python
+    buildCommand: pip install -r requirements.txt
+    startCommand: python airoki_bot.py
+    runtime: python
+    pythonVersion: 3.11.9
