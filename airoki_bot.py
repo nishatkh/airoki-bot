@@ -1,17 +1,13 @@
-import os
 import requests
 from telegram import Update
 from telegram.ext import (
     ApplicationBuilder, CommandHandler,
     MessageHandler, ContextTypes, filters
 )
-from dotenv import load_dotenv
 
-load_dotenv()
-
-# Load API keys from environment variables
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN")
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+# === Hardcoded API Keys ===
+TELEGRAM_BOT_TOKEN = "7002663931:AAEjyA5R-FfQ3N5zgFV0c1nO7-rMy-nj6Fg"
+OPENROUTER_API_KEY = "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"
 
 # Store user-specific personality in memory (reset on bot restart)
 user_personality = {}
@@ -58,7 +54,8 @@ async def chat(update: Update, context: ContextTypes.DEFAULT_TYPE):
     try:
         response = requests.post("https://openrouter.ai/api/v1/chat/completions", json=payload, headers=headers)
         reply = response.json()["choices"][0]["message"]["content"]
-    except Exception:
+    except Exception as e:
+        print("Error:", e)
         reply = "😞 Sorry, I’m having trouble replying right now."
 
     await update.message.reply_text(reply)
@@ -73,4 +70,5 @@ if __name__ == '__main__':
 
     print("✅ Airoki is running...")
     app.run_polling()
+
 
